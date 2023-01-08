@@ -1,0 +1,70 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define ROWS 3
+#define COLUMNS 3
+
+void drawBoard(char board[ROWS][COLUMNS]) {
+    printf(" %c | %c | %c\n", board[0][0], board[0][1], board[0][2]);
+    printf("---+---+---\n");
+    printf(" %c | %c | %c\n", board[1][0], board[1][1], board[1][2]);
+    printf("---+---+---\n");
+    printf(" %c | %c | %c\n", board[2][0], board[2][1], board[2][2]);
+}
+
+void initializeBoard(char board[ROWS][COLUMNS]) {
+    int i, j;
+
+    for (i=0; i<ROWS; i++) {
+        for (j=0; j<COLUMNS; j++) {
+            board[i][j] = ' ';
+        }
+    }
+}
+
+void getInput(char board[ROWS][COLUMNS], char* player) {
+    int row, column;
+
+    printf("Enter a row (0, 1, 2) for player %c: ", *player);
+    scanf("%d", &row);
+    printf("Enter a column (0, 1, 2) for player %c: ", *player);
+    scanf("%d", &column);
+
+    if (board[row][column] != ' ') {
+        printf("That space is already occupied. Please try again.\n");
+        getInput(board, player);
+    }
+    else {
+        board[row][column] = *player;
+    }
+}
+
+char checkWinner(char board[ROWS][COLUMNS]) {
+    int i;
+
+    // check for horizontal wins
+    for (i=0; i<ROWS; i++) {
+        if (board[i][0] == board[i][1] && board[i][1] == board[i][2] && board[i][0] != ' ') {
+            return board[i][0];
+        }
+    }
+
+    // check for vertical wins
+    for (i=0; i<COLUMNS; i++) {
+        if (board[0][i] == board[1][i] && board[1][i] == board[2][i] && board[0][i] != ' ') {
+            return board[0][i];
+        }
+    }
+
+    // check for diagonal wins
+    if (board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[0][0] != ' ') {
+        return board[0][0];
+    }
+    if (board[0][2] == board[1][1] && board[1][1] == board[2][0] && board[0][2] != ' ') {
+        return board[0][2];
+    }
+
+    return ' ';
+}
+
+int main() {
